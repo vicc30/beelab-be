@@ -1,35 +1,78 @@
-/*  Archivo controllers/users.js
- *  Simulando la respuesta de objetos Usuario
- *  en un futuro aquí se utilizarán los modelos
- */
+const mongoose = require("mongoose")
+const User = mongoose.model("User")
+const passport = require('passport');
 
-const User = require('../models/User');
+function createUser(req, res, next) {
+  // Instanciaremos un nuevo usuario utilizando la clase usuario
+  const body = req.body;
+  const password = body.password;
 
-function createUser(req, res) {
-  let user = new User(req.body);
-  res.status(201).send(user);
+  delete body.password;
+  const user = new User(body);
+  user.create(password);
+  user.save().then(user => { //Guardando nuevo usuario en MongoDB.
+    return res.status(201).json(user.toAuthJSON())
+  }).catch(next);
 }
 
-function getUsers(req, res) {
-  let user1 = new User(1, 'Victor', 'Cruz', 'victor@test.com');
-  let user2 = new User(2, 'Jesús', 'Serrano', 'jesus@test.com');
-  res.send([user1, user2]);
+function getUsers(req, res, next) { //Obteniendo usuario desde MongoDB.
+  User.findById(req.user.id, (err, user) => {
+    if (!user || err) {
+      return res.sendStatus(401)
+    }
+    return res.json(user.publicData());
+  }).catch(next);
 }
 
-function updateUser (req, res) {
-  let user1 = new User(req.params.id, 'Victor', 'Cruz', 'victor@test.com');
-  let toUpdate = req.body;
-  user1 = { ...user1, ...toUpdate };
-  res.send(user1);
+function updateUser(req, res, next) {
+  console.log(req.user);
+  User.findById(req.user.id).then(user => {
+    if (!user) { return res.sendStatus(401); }
+    let newInfo = req.body;
+    if (typeof newInfo.userName !== 'undefined') user.userName = newInfo.userName;
+    if (typeof newInfo.phone !== 'undefined') user.phone = newInfo.phone;
+    if (typeof newInfo.avatar !== 'undefined') user.avatar = newInfo.avatar;
+    if (typeof newInfo.notifications !== 'undefined') user.notifications = newInfo.notifications;
+    if (typeof newInfo.deleted !== 'undefined') user.deleted = newInfo.deleted;
+    if (typeof newInfo.password !== 'undefined')user.createPassword(newInfo.password);
+    user.save().then(updatedUser => { //Guardando usuario modificado en MongoDB.
+      res.status(201).json(updatedUser.publicData())
+    }).catch(next)
+  }).catch(next)
 }
 
 function deleteUser(req, res) {
-  res.status(200).send(`Usuario ${req.params.id} eliminado`);
+  // únicamente borra a su propio usuario obteniendo el id del token
+  Usuario.findOneAndDelete({ _id: req.user.id }).then(r => {//Buscando y eliminando usuario en MongoDB.
+    res.status(200).send(`Usuario ${req.params.id} eliminado: ${r}`);
+  })
+}
+
+function login(req, res, next) {
+  if (!req.body.email) {
+    return res.status(422).json({ errors: { email: "no puede estar vacío" } });
+  }
+
+  if (!req.body.password) {
+    return res.status(422).json({ errors: { password: "no puede estar vacío" } });
+  }
+
+  passport.authenticate('local', { session: false }, function (err, user, info) {
+    if (err) { return next(err); }
+
+    if (user) {
+      user.token = user.generarJWT();
+      return res.json({ user: user.toAuthJSON() });
+    } else {
+      return res.status(422).json(info);
+    }
+  })(req, res, next);
 }
 
 module.exports = {
   createUser,
   getUsers,
   updateUser,
-  deleteUser
+  deleteUser,
+  login
 }

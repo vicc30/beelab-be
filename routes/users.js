@@ -3,12 +3,16 @@ const {
   getUsers,
   createUser,
   updateUser,
-  deleteUser
-} = require('../controllers/users')
+  deleteUser,
+  login
+} = require('../controllers/users');
+const auth = require('./auth');
 
-router.get('/', getUsers);
+router.get('/', auth.requerido, getUsers);
+router.get('/:id', auth.requerido, getUsers);
 router.post('/', createUser);
-router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
+router.post('/entrar', login);
+router.put('/:id', auth.requerido, updateUser);
+router.delete('/:id', auth.requerido, deleteUser);
 
 module.exports = router;

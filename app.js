@@ -1,6 +1,16 @@
 let express = require('express');
 let bodyParser = require('body-parser');
 let cors = require('cors');
+const mongoose = require('mongoose');
+
+mongoose.connect(
+    "mongodb+srv://testUser:pYeVS3UoRmkAi1pf@cluster0.di9rh.mongodb.net/Beelab-be?retryWrites=true&w=majority"
+);
+
+mongoose.set("debug", true);
+
+require("./models/User");
+require('./config/passport');
 
 // Objeto global de la app
 let app = express();
