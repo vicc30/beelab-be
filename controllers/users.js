@@ -1,5 +1,5 @@
-const mongoose = require("mongoose")
-const User = mongoose.model("User")
+const mongoose = require("mongoose");
+const User = mongoose.model("User");
 const passport = require('passport');
 
 function createUser(req, res, next) {
@@ -9,7 +9,7 @@ function createUser(req, res, next) {
 
   delete body.password;
   const user = new User(body);
-  user.create(password);
+  user.createPassword(password);
   user.save().then(user => { //Guardando nuevo usuario en MongoDB.
     return res.status(201).json(user.toAuthJSON())
   }).catch(next);
@@ -29,7 +29,7 @@ function updateUser(req, res, next) {
   User.findById(req.user.id).then(user => {
     if (!user) { return res.sendStatus(401); }
     let newInfo = req.body;
-    if (typeof newInfo.userName !== 'undefined') user.userName = newInfo.userName;
+    if (typeof newInfo.username !== 'undefined') user.username = newInfo.userName;
     if (typeof newInfo.phone !== 'undefined') user.phone = newInfo.phone;
     if (typeof newInfo.avatar !== 'undefined') user.avatar = newInfo.avatar;
     if (typeof newInfo.notifications !== 'undefined') user.notifications = newInfo.notifications;
@@ -43,7 +43,7 @@ function updateUser(req, res, next) {
 
 function deleteUser(req, res) {
   // únicamente borra a su propio usuario obteniendo el id del token
-  Usuario.findOneAndDelete({ _id: req.user.id }).then(r => {//Buscando y eliminando usuario en MongoDB.
+  User.findOneAndDelete({ _id: req.user.id }).then(r => {//Buscando y eliminando usuario en MongoDB.
     res.status(200).send(`Usuario ${req.params.id} eliminado: ${r}`);
   })
 }

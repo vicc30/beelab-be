@@ -1,12 +1,12 @@
-const mongoose = require('mongoose'),
-    uniqueValidator = require('mongoose-unique-validator');
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const secret = require('../config').secret;
 
 
 const UserSchema = new mongoose.Schema({
-    userName: {
+    username: {
         type: String,
         unique: true,
         lowercase: true,
@@ -14,12 +14,12 @@ const UserSchema = new mongoose.Schema({
         match: [/^[a-zA-Z0-9]+$/, "Debe contener solo simbolos alfanumericos"],
         index: true,
     },
-    firstName: {
+    firstname: {
         type: String,
         required: [true, "Se debe proporcionar firstName"],
         match: [/^[a-zA-Z]+$/, "Debe contener solo caracteres"],
     },
-    lastName: {
+    lastname: {
         type: String,
         required: [true, "Se debe proporcionar lastName"],
         match: [/^[a-zA-Z]+$/, "Debe contener solo caracteres alfanumericos"],
@@ -36,9 +36,10 @@ const UserSchema = new mongoose.Schema({
         match: [/^[0-9]+$/, "Solo debe incluir numeros"],
     },
     notifications: Boolean,
-    password: String,
     avatar: String,
-    deleted: Boolean
+    deleted: Boolean,
+    hash: String, //este campo se utilizará para la sesión
+    salt: String, //este campo se utilizará para la sesión
 }, { timestamps: true });
 
 UserSchema.plugin(uniqueValidator, { message: "Ya existe" });
@@ -92,12 +93,12 @@ UserSchema.methods.publicData = function(){
     username: this.username,
     email: this.email,
     phone: this.phone,
-    firstName: this.firstName,
-    lastName: this.lastName,
+    firstname: this.firstname,
+    lastname: this.lastname,
     avatar: this.avatar,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt
   };
 };
 
-mongoose.model("User", UserSchema);
+mongoose.model("User", UserSchema); 
