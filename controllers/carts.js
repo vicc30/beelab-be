@@ -3,12 +3,12 @@
  *  en un futuro aquí se utilizarán los modelos
  */
 
-import Product from '../models/Product';
-import Cart from '../models/Cart';
+const Product = require('../models/Product');
+const Cart = require('../models/Cart');
 
 function createCart(req, res) {
-    let user = new Cart(req.body);
-    res.status(201).send(user);
+    let cart = new Cart(req.body);
+    res.status(201).send(cart);
 }
 
 function getCart(req, res) {
@@ -29,7 +29,7 @@ function deleteCart(req, res) {
     res.status(200).send(`Carrito ${req.params.id} eliminado`);
 }
 
-export default {
+module.exports = {
     createCart,
     getCart,
     updateCart,

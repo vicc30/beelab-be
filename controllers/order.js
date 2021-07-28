@@ -3,7 +3,7 @@
  *  en un futuro aquí se utilizarán los modelos
  */
 
-import Order from '../models/Order';
+const Order = require('../models/Order');
 
 function createOrder(req, res) {
     let user = new Order(req.body);
@@ -27,7 +27,7 @@ function deleteOrder(req, res) {
     res.status(200).send(`Orden ${req.params.id} eliminada`);
 }
 
-export default {
+module.exports = {
     createOrder,
     getOrders,
     updateOrder,

@@ -3,7 +3,7 @@
  *  en un futuro aquí se utilizarán los modelos
  */
 
-import User from '../models/User';
+const User = require('../models/User');
 
 function createUser(req, res) {
   let user = new User(req.body);
@@ -27,7 +27,7 @@ function deleteUser(req, res) {
   res.status(200).send(`Usuario ${req.params.id} eliminado`);
 }
 
-export default {
+module.exports = {
   createUser,
   getUsers,
   updateUser,

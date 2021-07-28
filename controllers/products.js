@@ -3,7 +3,7 @@
  *  en un futuro aquí se utilizarán los modelos
  */
 
-import Product from '../models/Product';
+const Product = require('../models/Product');
 
 function createProduct(req, res) {
     let product = new Product(req.body);
@@ -27,7 +27,7 @@ function deleteProduct(req, res) {
     res.status(200).send(`Producto ${req.params.id} eliminado`);
 }
 
-export default {
+module.exports = {
     createProduct,
     getProducts,
     updateProduct,
