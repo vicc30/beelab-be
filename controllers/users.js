@@ -29,7 +29,7 @@ function updateUser(req, res, next) {
   User.findById(req.user.id).then(user => {
     if (!user) { return res.sendStatus(401); }
     let newInfo = req.body;
-    if (typeof newInfo.username !== 'undefined') user.username = newInfo.userName;
+    if (typeof newInfo.userName !== 'undefined') user.userName = newInfo.userName;
     if (typeof newInfo.phone !== 'undefined') user.phone = newInfo.phone;
     if (typeof newInfo.avatar !== 'undefined') user.avatar = newInfo.avatar;
     if (typeof newInfo.notifications !== 'undefined') user.notifications = newInfo.notifications;
@@ -49,8 +49,8 @@ function deleteUser(req, res) {
 }
 
 function login(req, res, next) {
-  if (!req.body.email) {
-    return res.status(422).json({ errors: { email: "no puede estar vacío" } });
+  if (!req.body.userName) {
+    return res.status(422).json({ errors: { userName: "no puede estar vacío" } });
   }
 
   if (!req.body.password) {

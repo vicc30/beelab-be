@@ -6,7 +6,7 @@ const secret = require('../config').secret;
 
 
 const UserSchema = new mongoose.Schema({
-    username: {
+    userName: {
         type: String,
         unique: true,
         lowercase: true,
@@ -68,7 +68,7 @@ UserSchema.methods.generateJWT = function() {
 
   return jwt.sign({
     id: this._id,
-    username: this.username,
+    userName: this.userName,
     exp: parseInt(exp.getTime() / 1000),
   }, secret);
 };
@@ -78,7 +78,7 @@ UserSchema.methods.generateJWT = function() {
  */
  UserSchema.methods.toAuthJSON = function(){
   return {
-    username: this.username,
+    userName: this.userName,
     email: this.email,
     token: this.generateJWT()
   };
@@ -90,7 +90,7 @@ UserSchema.methods.generateJWT = function() {
 UserSchema.methods.publicData = function(){
   return {
     id: this.id,
-    username: this.username,
+    userName: this.userName,
     email: this.email,
     phone: this.phone,
     firstname: this.firstname,
