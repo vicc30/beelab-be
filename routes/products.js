@@ -4,11 +4,14 @@ const {
     getProducts,
     updateProduct,
     deleteProduct
-} = require('../controllers/products')
+} = require('../controllers/products');
 
-router.get('/', getProducts);
-router.post('/', createProduct);
-router.put('/:id', updateProduct);
-router.delete('/:id', deleteProduct);
+const auth = require('./auth');
+
+router.get('/', auth.opcional, getProducts);
+router.get('/:id', auth.opcional, getProducts);
+router.post('/', auth.required, createProduct);
+router.put('/:id', auth.required, updateProduct);
+router.delete('/:id', auth.required, deleteProduct);
 
 module.exports = router;

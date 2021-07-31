@@ -4,6 +4,10 @@ let cors = require('cors');
 let app = express();
 const mongoose = require('mongoose');
 
+require("./models/User");
+require('./config/passport');
+require("./models/Product");
+
 // configuración de middlewares
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,9 +45,6 @@ if (!isProduction) {
         })
     })
 }
-
-require("./models/User");
-require('./config/passport');
 
 app.use('/v1', require('./routes'));
 

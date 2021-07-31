@@ -25,7 +25,6 @@ function getUsers(req, res, next) { //Obteniendo usuario desde MongoDB.
 }
 
 function updateUser(req, res, next) {
-  console.log(req.user);
   User.findById(req.user.id).then(user => {
     if (!user) { return res.sendStatus(401); }
     let newInfo = req.body;
@@ -34,10 +33,10 @@ function updateUser(req, res, next) {
     if (typeof newInfo.avatar !== 'undefined') user.avatar = newInfo.avatar;
     if (typeof newInfo.notifications !== 'undefined') user.notifications = newInfo.notifications;
     if (typeof newInfo.deleted !== 'undefined') user.deleted = newInfo.deleted;
-    if (typeof newInfo.password !== 'undefined')user.createPassword(newInfo.password);
+    if (typeof newInfo.password !== 'undefined') user.createPassword(newInfo.password);
     user.save().then(updatedUser => { //Guardando usuario modificado en MongoDB.
       res.status(201).json(updatedUser.publicData())
-    }).catch(next)
+    }).catch(next);
   }).catch(next)
 }
 
