@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 mongoose.connect(
-    "mongodb+srv://testUser:pYeVS3UoRmkAi1pf@cluster0.di9rh.mongodb.net/Beelab-be?retryWrites=true&w=majority",
+    "mongodb+srv://testUser:E8Xrryy5Dlb4K14Q@cluster0.di9rh.mongodb.net/Beelab-be?retryWrites=true&w=majority",
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -59,3 +59,15 @@ app.use(function (req, res, next) {
 let server = app.listen(process.env.PORT || 3000, function () {
     console.log('Escuchando en el puerto ' + server.address().port);
 });
+
+// {
+//     "userName": "vic00",
+//     "firstname": "Vic",
+//     "lastname": "Cruz",
+//     "email": "vic00@test.com",
+//     "password": "testeand0",
+//     "notifications": true,
+//     "avatar": "",
+//     "phone": "555555",
+//     "deleted": false
+// }
