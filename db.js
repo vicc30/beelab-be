@@ -4,13 +4,12 @@ const Product = require('./models/product')
 const Review = require('./models/review')
 const User = require('./models/user')
 
-const sequelize = new Sequelize(
-  'beelab', 'admin', 'doyidet297', {
-    host: 'mysql-46184-0.cloudclusters.net',
-    dialect: 'mysql',
-    port: 19896
-  }
-)
+const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  dialect: process.env.DIALECT,
+  logging: false,
+});
 
 const models = [
   Product,
@@ -18,7 +17,7 @@ const models = [
   User
 ]
 
-for(let model of models){
+for (let model of models) {
   model(sequelize)
 }
 
